@@ -26,19 +26,13 @@ var kaspaURL = os.Args[1]
 
 func main() {
 
-	client, err := rpcclient.NewRPCClient(kaspaURL)
-	if err != nil {
-		panic(err)
-	}
-	defer client.Close()
-
 	promlogConfig := &promlog.Config{}
 	logger := promlog.New(promlogConfig)
 	level.Info(logger).Log("msg", "Starting kaspa_exporter", "version", version.Version)
 
 	http.Handle("/metrics", promhttp.Handler())
 	http.HandleFunc("/probe", func(w http.ResponseWriter, req *http.Request) {
-		probeHandler(w, req, logger, client)
+		probeHandler(w, req, logger, nil)
 	})
 
 	server := &http.Server{Addr: listenAddress}
@@ -49,12 +43,18 @@ func main() {
 
 }
 
-func probeHandler(w http.ResponseWriter, r *http.Request, logger log.Logger, client *rpcclient.RPCClient) {
+func probeHandler(w http.ResponseWriter, r *http.Request, logger log.Logger, _ *rpcclient.RPCClient) {
 	ctx, cancel := context.WithCancel(r.Context())
 	defer cancel()
 	r = r.WithContext(ctx)
 
 	registry := prometheus.NewPedanticRegistry()
+
+	client, err := rpcclient.NewRPCClient(kaspaURL)
+	if err != nil {
+		panic(err)
+	}
+	defer client.Close()
 
 	col := collector.New(logger, namespace, client)
 
