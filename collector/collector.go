@@ -36,12 +36,12 @@ func (c *KaspaCollector) Describe(ch chan<- *prometheus.Desc) {
 func (c *KaspaCollector) Collect(ch chan<- prometheus.Metric) {
 	for _, m := range c.Metrics {
 		if err := m.Collect(c.client); err != nil {
-			level.Error(c.Logger).Log("msg", "Failed to collect metrics", "collector", m.String(), "err", err)
+			level.Error(c.Logger).Log("msg", "Failed to collect metrics", "collector", m.String(), "err", err) // nolint: errcheck
 			continue
 		}
 		metrics, err := m.Get()
 		if err != nil {
-			level.Error(c.Logger).Log("msg", "Failed to get metrics", "collector", m.String(), "err", err)
+			level.Error(c.Logger).Log("msg", "Failed to get metrics", "collector", m.String(), "err", err) // nolint: errcheck
 			continue
 		}
 		for _, metric := range metrics {

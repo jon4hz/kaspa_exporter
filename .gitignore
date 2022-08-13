@@ -1,0 +1,6 @@
+manpages/
+completions/
+.vscode/
+dist/
+tmp/
+/config.yml
