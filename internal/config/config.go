@@ -57,5 +57,6 @@ func load(file string) (cfg *Config, err error) {
 	if err = viper.Unmarshal(&cfg); err != nil {
 		return
 	}
+	viper.AutomaticEnv()
 	return
 }
