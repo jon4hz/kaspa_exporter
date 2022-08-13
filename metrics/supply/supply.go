@@ -3,14 +3,13 @@ package supply
 import (
 	"fmt"
 
-	"github.com/kaspanet/kaspad/app/appmessage"
 	"github.com/kaspanet/kaspad/infrastructure/network/rpcclient"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
 type Collector struct {
 	descs  []*prometheus.Desc
-	supply *appmessage.GetCoinSupplyResponseMessage
+	supply float64
 }
 
 func (c *Collector) String() string { return "supply" }
@@ -31,12 +30,12 @@ func (c *Collector) Collect(client *rpcclient.RPCClient) error {
 	if err != nil {
 		return fmt.Errorf("failed to get supply: %w", err)
 	}
-	c.supply = supply
+	c.supply = float64(supply.CirculatingSompi)
 	return nil
 }
 
 func (c *Collector) Get() ([]prometheus.Metric, error) {
 	return []prometheus.Metric{
-		prometheus.MustNewConstMetric(c.Desc()[0], prometheus.GaugeValue, float64(c.supply.CirculatingSompi)),
+		prometheus.MustNewConstMetric(c.Desc()[0], prometheus.GaugeValue, c.supply),
 	}, nil
 }
