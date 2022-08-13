@@ -3,7 +3,7 @@ module github.com/jon4hz/kaspa_exporter
 go 1.19
 
 require (
-	github.com/go-kit/log v0.2.0
+	github.com/go-kit/log v0.2.1
 	github.com/kaspanet/kaspad v0.12.4
 	github.com/muesli/mango-cobra v1.2.0
 	github.com/muesli/roff v0.1.0
