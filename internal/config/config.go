@@ -51,12 +51,12 @@ func load(file string) (cfg *Config, err error) {
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("$HOME/.config/kaspa_exporter")
 	viper.AddConfigPath("/etc/kaspa_exporter/")
+	viper.AutomaticEnv()
 	if err = viper.ReadInConfig(); err != nil {
 		return
 	}
 	if err = viper.Unmarshal(&cfg); err != nil {
 		return
 	}
-	viper.AutomaticEnv()
 	return
 }
