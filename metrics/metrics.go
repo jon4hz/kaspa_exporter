@@ -30,7 +30,7 @@ func New(logger log.Logger, namespace string) []Metrics {
 	metrics := make([]Metrics, 0)
 	for _, m := range availableMetrics {
 		if err := m.Init(namespace); err != nil {
-			level.Error(logger).Log("msg", "Failed to initialize metrics", "collector", m.String(), "err", err)
+			level.Error(logger).Log("msg", "Failed to initialize metrics", "collector", m.String(), "err", err) // nolint: errcheck
 			continue
 		}
 		metrics = append(metrics, m)

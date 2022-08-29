@@ -3,14 +3,14 @@ package mempool
 import (
 	"fmt"
 
-	"github.com/kaspanet/kaspad/app/appmessage"
 	"github.com/kaspanet/kaspad/infrastructure/network/rpcclient"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
 type Collector struct {
 	descs   []*prometheus.Desc
-	entries *appmessage.GetMempoolEntriesResponseMessage
+	entries float64
+	orphans float64
 }
 
 func (c *Collector) String() string { return "mempool" }
@@ -32,19 +32,18 @@ func (c *Collector) Collect(client *rpcclient.RPCClient) error {
 	if err != nil {
 		return fmt.Errorf("failed to get mempool: %w", err)
 	}
-	c.entries = entries
+	c.entries = float64(len(entries.Entries))
+	for _, entry := range entries.Entries {
+		if entry.IsOrphan {
+			c.orphans++
+		}
+	}
 	return nil
 }
 
 func (c *Collector) Get() ([]prometheus.Metric, error) {
-	var orphansCount int
-	for _, entry := range c.entries.Entries {
-		if entry.IsOrphan {
-			orphansCount++
-		}
-	}
 	return []prometheus.Metric{
-		prometheus.MustNewConstMetric(c.Desc()[0], prometheus.GaugeValue, float64(len(c.entries.Entries))),
-		prometheus.MustNewConstMetric(c.Desc()[1], prometheus.GaugeValue, float64(orphansCount)),
+		prometheus.MustNewConstMetric(c.Desc()[0], prometheus.GaugeValue, c.entries),
+		prometheus.MustNewConstMetric(c.Desc()[1], prometheus.GaugeValue, c.orphans),
 	}, nil
 }
