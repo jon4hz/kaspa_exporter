@@ -60,16 +60,9 @@ func root(cmd *cobra.Command, args []string) {
 	logger := promlog.New(promlogConfig)
 	level.Info(logger).Log("msg", "Starting kaspa_exporter", "version", version.Version) // nolint: errcheck
 
-	client, err := rpcclient.NewRPCClient(cfg.KaspaURL)
-	if err != nil {
-		level.Error(logger).Log("msg", "Failed to start the server", "err", err) // nolint: errcheck
-		os.Exit(1)
-	}
-	defer client.Close()
-
 	http.Handle("/metrics", promhttp.Handler())
 	http.HandleFunc("/probe", func(w http.ResponseWriter, req *http.Request) {
-		probeHandler(w, req, cfg, logger, client)
+		probeHandler(w, req, cfg, logger)
 	})
 
 	server := &http.Server{Addr: cfg.Listen, ReadHeaderTimeout: 5 * time.Second}
@@ -83,10 +76,17 @@ func Execute() error {
 	return rootCmd.Execute()
 }
 
-func probeHandler(w http.ResponseWriter, r *http.Request, cfg *config.Config, logger log.Logger, client *rpcclient.RPCClient) {
+func probeHandler(w http.ResponseWriter, r *http.Request, cfg *config.Config, logger log.Logger) {
 	ctx, cancel := context.WithCancel(r.Context())
 	defer cancel()
 	r = r.WithContext(ctx)
+
+	client, err := rpcclient.NewRPCClient(cfg.KaspaURL)
+	if err != nil {
+		level.Error(logger).Log("msg", "Failed to start the server", "err", err) // nolint: errcheck
+		return
+	}
+	defer client.Close()
 
 	registry := prometheus.NewPedanticRegistry()
 
