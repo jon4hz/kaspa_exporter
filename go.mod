@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/go-kit/log v0.2.1
-	github.com/kaspanet/kaspad v0.12.5
+	github.com/kaspanet/kaspad v0.12.6
 	github.com/muesli/mango-cobra v1.2.0
 	github.com/muesli/roff v0.1.0
 	github.com/prometheus/client_golang v1.13.0
