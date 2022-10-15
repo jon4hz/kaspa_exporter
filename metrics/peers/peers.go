@@ -35,14 +35,17 @@ func (c *Collector) Collect(client *rpcclient.RPCClient) error {
 		return fmt.Errorf("failed to get peers: %w", err)
 	}
 	c.total = float64(len(peers.Infos))
+	var inbound, outbound float64
 	for _, i := range peers.Infos {
 		if i.IsIBDPeer {
-			c.inbound++
+			inbound++
 		}
 		if i.IsOutbound {
-			c.outbound++
+			outbound++
 		}
 	}
+	c.inbound = inbound
+	c.outbound = outbound
 	return nil
 }
 

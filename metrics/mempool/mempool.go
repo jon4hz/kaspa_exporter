@@ -33,11 +33,13 @@ func (c *Collector) Collect(client *rpcclient.RPCClient) error {
 		return fmt.Errorf("failed to get mempool: %w", err)
 	}
 	c.entries = float64(len(entries.Entries))
+	orphans := 0.0
 	for _, entry := range entries.Entries {
 		if entry.IsOrphan {
-			c.orphans++
+			orphans++
 		}
 	}
+	c.orphans = orphans
 	return nil
 }
 
