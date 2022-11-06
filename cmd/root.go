@@ -66,7 +66,7 @@ func root(cmd *cobra.Command, args []string) {
 	})
 
 	server := &http.Server{Addr: cfg.Listen, ReadHeaderTimeout: 5 * time.Second}
-	if err := web.ListenAndServe(server, cfg.TLSConfigFile, logger); err != nil {
+	if err := web.ListenAndServe(server, &web.FlagConfig{WebConfigFile: &cfg.TLSConfigFile}, logger); err != nil {
 		level.Error(logger).Log("msg", "Failed to start the server", "err", err) // nolint: errcheck
 		os.Exit(1)
 	}
