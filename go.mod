@@ -8,7 +8,7 @@ require (
 	github.com/muesli/mango-cobra v1.2.0
 	github.com/muesli/roff v0.1.0
 	github.com/prometheus/client_golang v1.14.0
-	github.com/prometheus/common v0.37.0
+	github.com/prometheus/common v0.38.0
 	github.com/prometheus/exporter-toolkit v0.8.2
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.14.0
@@ -28,7 +28,7 @@ require (
 	github.com/jpillora/backoff v1.0.0 // indirect
 	github.com/jrick/logrotate v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
-	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
+	github.com/matttproud/golang_protobuf_extensions v1.0.2 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/muesli/mango v0.1.0 // indirect
 	github.com/muesli/mango-pflag v0.1.0 // indirect
