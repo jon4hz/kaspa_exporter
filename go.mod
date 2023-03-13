@@ -8,7 +8,7 @@ require (
 	github.com/muesli/mango-cobra v1.2.0
 	github.com/muesli/roff v0.1.0
 	github.com/prometheus/client_golang v1.14.0
-	github.com/prometheus/common v0.41.0
+	github.com/prometheus/common v0.42.0
 	github.com/prometheus/exporter-toolkit v0.8.2
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.15.0
